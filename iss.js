@@ -62,16 +62,19 @@ const fetchCoordsByIP = function(ip, callback) {
  */
 
 const fetchISSFlyOverTimes = (cords, callback) => {
-  request(`https://iss-flyover.herokuapp.com/json/?lat=${cords.latitude}&lon=${cords.longitude}`, (error,response,body) => {
+  const searchLink = `https://iss-flyover.herokuapp.com/json/?lat=${cords.latitude}&lon=${cords.longitude}`;
+
+  request(searchLink, (error,response,body) => {
 
   //error handle for request fail
   if(error) return callback(error, null)
 
   //error handle for invalid URL
-  // if (response.statusCode !== 200) {
-  //   console.error(`Error: Invalid URL: https://api.thecatapi.com/v1/breeds/search?q=${breedName}`);
-  //   return;
-  // }
+  if (response.statusCode !== 200) {
+    console.error(`Error: Invalid URL: ${searchLink}`);
+    return;
+  }
+
   const flyoverDataParse = JSON.parse(body).response;
   console.log(flyoverDataParse);
 
