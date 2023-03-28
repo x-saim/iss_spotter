@@ -69,21 +69,18 @@ const nextISSTimesForMyLocation = (callback) => {
     if (error) {
       return callback(error,null);
     }
-    console.log('It worked! Returned IP:' , ip);
 
     //fetchCoordsByIP() nested callback Implementation
     fetchCoordsByIP(`http://ipwho.is/${ip}`, (error,coords) =>{
       if (error) {
         return callback(error,null);
       }
-      console.log('It worked! Returned IP coordinates:' , coords);
 
       //fetchISSFlyOverTimes() nested callback Implementation
       fetchISSFlyOverTimes(coords, (error,passes) =>{
         if (error) {
           return callback(error,null);
         }
-        console.log('It worked! Returned passes:', passes);
 
         callback(null,passes);
 
