@@ -37,16 +37,18 @@ const fetchCoordsByIP = function(ip, callback) {
     if (error) return callback(error,null);
 
     //error handling for invalild IP Address
+    const parsedBody = JSON.parse(body);
     const sucessCheck = JSON.parse(body).success;
     if (sucessCheck === false) {
       callback(Error(`Error: ${JSON.parse(body).message}`), null);
       return;
-    } 
-      
-      const { latitude, longitude } = parsedBody;
-      callback(null,{latitude, longitude});
     }
-)}
+      
+    const { latitude, longitude } = parsedBody;
+    callback(null,{latitude, longitude});
+  }
+  );
+};
 
 
 module.exports = { fetchMyIP, fetchCoordsByIP };
