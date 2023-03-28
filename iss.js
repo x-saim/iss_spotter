@@ -31,4 +31,23 @@ const fetchMyIP = function(callback) {
   );
 };
 
-module.exports = { fetchMyIP };
+const fetchCoordsByIP = function (ip, callback) {
+  request("http://ipwho.is/99.246.22.219", (error, response, body) => {
+  if(error) return callback(error,null)
+
+  const geoData = {
+    "latitude":
+    "longitude"
+  };
+
+  geoData.latitude = JSON.parse(body).latitude;
+  geoData.longitude = JSON.parse(body).longitude;
+  console.log(geoData);
+
+  })
+
+
+
+  }
+
+module.exports = { fetchMyIP, fetchCoordsByIP };
