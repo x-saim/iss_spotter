@@ -50,5 +50,36 @@ const fetchCoordsByIP = function(ip, callback) {
   );
 };
 
+/**
+ * Makes a single API request to retrieve upcoming ISS fly over times the for the given lat/lng coordinates.
+ * Input:
+ *   - An object with keys `latitude` and `longitude`
+ *   - A callback (to pass back an error or the array of resulting data)
+ * Returns (via Callback):
+ *   - An error, if any (nullable)
+ *   - The fly over times as an array of objects (null if error). Example:
+ *     [ { risetime: 134564234, duration: 600 }, ... ]
+ */
 
-module.exports = { fetchMyIP, fetchCoordsByIP };
+const fetchISSFlyOverTimes = (cords, callback) => {
+  request(`https://iss-flyover.herokuapp.com/json/?lat=${cords.latitude}&lon=${cords.longitude}`, (error,response,body) => {
+
+  //error handle for request fail
+  if(error) return callback(error, null)
+
+  //error handle for invalid URL
+  // if (response.statusCode !== 200) {
+  //   console.error(`Error: Invalid URL: https://api.thecatapi.com/v1/breeds/search?q=${breedName}`);
+  //   return;
+  // }
+  const flyoverDataParse = JSON.parse(body).response;
+  console.log(flyoverDataParse);
+
+
+  }
+
+
+)};
+
+
+module.exports = { fetchMyIP, fetchCoordsByIP,fetchISSFlyOverTimes };
