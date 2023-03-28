@@ -15,10 +15,6 @@ const request = require("request");
 const fetchMyIP = function(callback) {
   //use request to fetch IP address from JSON API
   request('https://api.ipify.org/?format=json', (error, response, body) => {
-    console.log('error:', error); // Print the error if one occurred
-    console.log('statusCode:', response && response.statusCode);
-    console.log('body:', body); // Print the IP
-
     if(error) {
       //pass through the error to the callback if an error occurs when requesting the IP data.
       callback(error,null);
@@ -27,15 +23,6 @@ const fetchMyIP = function(callback) {
       const extractedIP = JSON.parse(body);
       callback(null,extractedIP["ip"]);
     }
-
-    
-    
-
-
-
-
-
-
   });
 };
 
