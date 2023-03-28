@@ -30,32 +30,23 @@ const fetchMyIP = function(callback) {
   }
   );
 };
-//
-//http://ipwho.is/99.246.22.219
+
 const fetchCoordsByIP = function(ip, callback) {
-  request("https://ipwho.is/42", (error, response, body) => {
+  request(`http://ipwho.is/${ip}`, (error, response, body) => {
     //error handle for request
     if (error) return callback(error,null);
-
-    const geoData = {
-      "latitude":
-      "longitude"
-    };
 
     //error handling for invalild IP Address
     const sucessCheck = JSON.parse(body).success;
     if (sucessCheck === false) {
       callback(Error(`Error: ${JSON.parse(body).message}`), null);
       return;
-    } else {
+    } 
       
-      geoData.latitude = JSON.parse(body).latitude;
-      geoData.longitude = JSON.parse(body).longitude;
-      callback(null,geoData);
+      const { latitude, longitude } = parsedBody;
+      callback(null,{latitude, longitude});
     }
-  }
-  );
-};
+)}
 
 
 module.exports = { fetchMyIP, fetchCoordsByIP };
