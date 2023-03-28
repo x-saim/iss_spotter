@@ -1,5 +1,3 @@
-//logic for fetching the data from each API endpoint.
-
 /**
  * Makes a single API request to retrieve the user's IP address.
  * Input:
@@ -15,15 +13,22 @@ const request = require("request");
 const fetchMyIP = function(callback) {
   //use request to fetch IP address from JSON API
   request('https://api.ipify.org/?format=json', (error, response, body) => {
-    if(error) {
-      //pass through the error to the callback if an error occurs when requesting the IP data.
-      callback(error,null);
-    } else {
-      //parse and extract the IP address using JSON and then pass that through to the callback (as the second argument) if there is no error.
-      const extractedIP = JSON.parse(body);
-      callback(null,extractedIP["ip"]);
+    
+    //error can be set if invalid domain, user is offline, etc.
+    if (error) return callback(error,null)
+
+    // if non-200 status, assume server error
+    if (response.statusCode !== 200) {
+      callback(Error(`Status Code ${response.statusCode} when fetching IP. Response: ${body}`), null);
+      return;
     }
-  });
+
+    //parse and extract the IP address using JSON and then pass that through to the callback (as the second argument) if there is no error.
+    const extractedIP = JSON.parse(body).ip;
+    callback(null,extractedIP);
+    
+  }
+  );
 };
 
 module.exports = { fetchMyIP };
