@@ -1,12 +1,3 @@
-/**
- * Makes a single API request to retrieve the user's IP address.
- * Input:
- *   - A callback (to pass back an error or the IP string)
- * Returns (via Callback):
- *   - An error, if any (nullable)
- *   - The IP address as a string (null if error). Example: "162.245.144.188"
- */
-
 const request = require("request");
 
 //fetchMyIP which will asynchronously return our IP Address using an API.
@@ -42,44 +33,34 @@ const fetchCoordsByIP = function(ip, callback) {
       callback(Error(`Error: ${JSON.parse(body).message}`), null);
       return;
     }
-      
+    
+    //accessing only the lat/long key:value pairs from the site's JSON body.
     const { latitude, longitude } = parsedBody;
     callback(null,{ latitude, longitude });
   }
   );
 };
 
-/**
- * Makes a single API request to retrieve upcoming ISS fly over times the for the given lat/lng coordinates.
- * Input:
- *   - An object with keys `latitude` and `longitude`
- *   - A callback (to pass back an error or the array of resulting data)
- * Returns (via Callback):
- *   - An error, if any (nullable)
- *   - The fly over times as an array of objects (null if error). Example:
- *     [ { risetime: 134564234, duration: 600 }, ... ]
- */
+const fetchISSFlyOverTimes = (coords, callback) => {
+  const searchLink = `https://iss-flyover.herokuapp.com/json/?lat=${coords.latitude}&lon=${coords.longitude}`;
 
-// const fetchISSFlyOverTimes = (cords, callback) => {
-//   const searchLink = `https://iss-flyover.herokuapp.com/json/?lat=${cords.latitude}&lon=${cords.longitude}`;
+  request(searchLink, (error,response,body) => {
 
-//   request(searchLink, (error,response,body) => {
+    //error handle for request fail.
+    if (error) return callback(error, null);
 
-//     //error handle for request fail.
-//     if (error) return callback(error, null);
+    //error handle for invalid URL or incorrect coordinates.
+    if (response.statusCode !== 200) {
+      console.error(`Status Code ${response.statusCode}: Error: ${body}.`);
+      return;
+    }
 
-//     //error handle for invalid URL or incorrect coordinates.
-//     if (response.statusCode !== 200) {
-//       console.error(`Status Code ${response.statusCode}: Error: ${body}.`);
-//       return;
-//     }
+    const flyoverData = JSON.parse(body).response;
+    callback(null,flyoverData);
+  }
 
-//     const flyoverData = JSON.parse(body).response;
-//     callback(null,flyoverData);
-//   }
-
-//   );
-// };
+  );
+};
 
 
 // const nextISSTimesForMyLocation = (callback) {
@@ -87,4 +68,4 @@ const fetchCoordsByIP = function(ip, callback) {
 // }
 
 
-module.exports = { fetchMyIP,fetchCoordsByIP};
+module.exports = { fetchMyIP,fetchCoordsByIP,fetchISSFlyOverTimes};

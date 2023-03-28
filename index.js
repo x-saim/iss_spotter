@@ -1,41 +1,14 @@
-const { fetchMyIP,fetchCoordsByIP} = require('./iss');
+const { fetchMyIP,fetchCoordsByIP,fetchISSFlyOverTimes} = require('./iss');
 
-//constants
-
-
+//const { nextISSTimesForMyLocation } = require('./iss');
 // nextISSTimesForMyLocation((error, passTimes) => {
 //   if (error) {
 //     return console.log("It didn't work!", error);
 //   }
+//   // success, print out the deets!
+//   console.log(passTimes);
+// });
 
-//   fetchMyIP((error, ip) => {
-//     if (error) {
-//       return console.log("It didn't work!" , error);
-      
-//     }
-//     console.log('It worked! Returned IP:' , ip);
-  
-
-//     fetchCoordsByIP(ip, (error,coords) =>{
-//       if (error) {
-//         return console.log("It didn't work!" , error);
-//       }
-//       console.log('It worked! Returned IP coordinates:' , coords);
-      
-    
-//     }
-    
-    
-//     });
-
-//     console.log(passTimes);
-//   });
-
-
-//console.log(passTimes);
-
-
-//fetchMyIP() Implementation
 
 fetchMyIP((error, ip) => {
   if (error) {
@@ -50,36 +23,20 @@ fetchMyIP((error, ip) => {
     }
     console.log('It worked! Returned IP coordinates:' , coords);
   
-
     //fetchISSFlyOverTimes() nested callback Implementation
-
+   
+    fetchISSFlyOverTimes(coords, (error,passes) =>{
+      if (error) {
+        console.log("It didn't work!" , error);
+      } else {
+        console.log('It worked! Returned passes:' , passes);
+      }
+    });
 
   }
   );
   
 });
-
-//fetchCoordsByIP() Implementation
-
-// fetchCoordsByIP(`http://ipwho.is/${ip}`, (error,coords) =>{
-//   if (error) {
-//   console.log("It didn't work!" , error);
-//   }
-//   console.log('It worked! Returned IP coordinates:' , coords);
-  
-//   }
-// );
-
-
-//fetchISSFlyOverTimes() Implementation
-// const exampleCoords = { latitude: '49.27670', longitude: '-123.13000' };
-// fetchISSFlyOverTimes(exampleCoords, (error,passes) =>{
-//   if (error) {
-//     console.log("It didn't work!" , error);
-//   } else {
-//     console.log('It worked! Returned passes:' , passes);
-//   }
-// });
 
 
 /**
