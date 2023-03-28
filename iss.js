@@ -26,13 +26,12 @@ const fetchMyIP = function(callback) {
     //parse and extract the IP address using JSON and then pass that through to the callback (as the second argument) if there is no error.
     const extractedIP = JSON.parse(body).ip;
     callback(null,extractedIP);
-    
   }
   );
 };
 
 const fetchCoordsByIP = function(ip, callback) {
-  request(`http://ipwho.is/${ip}`, (error, response, body) => {
+  request(ip, (error, response, body) => {
     //error handle for request
     if (error) return callback(error,null);
 
@@ -45,7 +44,7 @@ const fetchCoordsByIP = function(ip, callback) {
     }
       
     const { latitude, longitude } = parsedBody;
-    callback(null,{latitude, longitude});
+    callback(null,{ latitude, longitude });
   }
   );
 };
@@ -61,29 +60,31 @@ const fetchCoordsByIP = function(ip, callback) {
  *     [ { risetime: 134564234, duration: 600 }, ... ]
  */
 
-const fetchISSFlyOverTimes = (cords, callback) => {
-  const searchLink = `https://iss-flyover.herokuapp.com/json/?lat=${cords.latitude}&lon=${cords.longitude}`;
+// const fetchISSFlyOverTimes = (cords, callback) => {
+//   const searchLink = `https://iss-flyover.herokuapp.com/json/?lat=${cords.latitude}&lon=${cords.longitude}`;
 
-  request(searchLink, (error,response,body) => {
+//   request(searchLink, (error,response,body) => {
 
-    //error handle for request fail.
-    if (error) return callback(error, null);
+//     //error handle for request fail.
+//     if (error) return callback(error, null);
 
-    //error handle for invalid URL or incorrect coordinates.
-    if (response.statusCode !== 200) {
-      console.error(`Status Code ${response.statusCode}: Error: ${body}.`);
-      return;
-    }
+//     //error handle for invalid URL or incorrect coordinates.
+//     if (response.statusCode !== 200) {
+//       console.error(`Status Code ${response.statusCode}: Error: ${body}.`);
+//       return;
+//     }
 
-    const flyoverData = JSON.parse(body).response;
-    callback(null,flyoverData);
+//     const flyoverData = JSON.parse(body).response;
+//     callback(null,flyoverData);
+//   }
 
-
-  }
-
-
-  );
-};
+//   );
+// };
 
 
-module.exports = { fetchMyIP, fetchCoordsByIP,fetchISSFlyOverTimes };
+// const nextISSTimesForMyLocation = (callback) {
+
+// }
+
+
+module.exports = { fetchMyIP,fetchCoordsByIP};
