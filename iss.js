@@ -66,23 +66,24 @@ const fetchISSFlyOverTimes = (cords, callback) => {
 
   request(searchLink, (error,response,body) => {
 
-  //error handle for request fail
-  if(error) return callback(error, null)
+    //error handle for request fail.
+    if (error) return callback(error, null);
 
-  //error handle for invalid URL
-  if (response.statusCode !== 200) {
-    console.error(`Error: Invalid URL: ${searchLink}`);
-    return;
+    //error handle for invalid URL or incorrect coordinates.
+    if (response.statusCode !== 200) {
+      console.error(`Status Code ${response.statusCode}: Error: ${body}.`);
+      return;
+    }
+
+    const flyoverData = JSON.parse(body).response;
+    callback(null,flyoverData);
+
+
   }
 
-  const flyoverDataParse = JSON.parse(body).response;
-  console.log(flyoverDataParse);
 
-
-  }
-
-
-)};
+  );
+};
 
 
 module.exports = { fetchMyIP, fetchCoordsByIP,fetchISSFlyOverTimes };
