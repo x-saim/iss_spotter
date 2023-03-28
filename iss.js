@@ -55,17 +55,43 @@ const fetchISSFlyOverTimes = (coords, callback) => {
       return;
     }
 
-    const flyoverData = JSON.parse(body).response;
-    callback(null,flyoverData);
+    const passes = JSON.parse(body).response;
+    callback(null,passes);
   }
 
   );
 };
 
 
-// const nextISSTimesForMyLocation = (callback) {
+const nextISSTimesForMyLocation = (callback) => {
+  //fetchMyIP() nested callback Implementation
+  fetchMyIP((error, ip) => {
+    if (error) {
+      return callback(error,null);
+    }
+    console.log('It worked! Returned IP:' , ip);
 
-// }
+    //fetchCoordsByIP() nested callback Implementation
+    fetchCoordsByIP(`http://ipwho.is/${ip}`, (error,coords) =>{
+      if (error) {
+        return callback(error,null);
+      }
+      console.log('It worked! Returned IP coordinates:' , coords);
 
+      //fetchISSFlyOverTimes() nested callback Implementation
+      fetchISSFlyOverTimes(coords, (error,passes) =>{
+        if (error) {
+          return callback(error,null);
+        }
+        console.log('It worked! Returned passes:', passes);
 
-module.exports = { fetchMyIP,fetchCoordsByIP,fetchISSFlyOverTimes};
+        callback(null,passes);
+
+      });
+    });
+
+  }
+  );
+};
+  
+module.exports = {nextISSTimesForMyLocation};

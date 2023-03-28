@@ -1,51 +1,15 @@
-const { fetchMyIP,fetchCoordsByIP,fetchISSFlyOverTimes} = require('./iss');
+const { nextISSTimesForMyLocation } = require('./iss');
 
-//const { nextISSTimesForMyLocation } = require('./iss');
-// nextISSTimesForMyLocation((error, passTimes) => {
-//   if (error) {
-//     return console.log("It didn't work!", error);
-//   }
-//   // success, print out the deets!
-//   console.log(passTimes);
-// });
-
-
-fetchMyIP((error, ip) => {
+nextISSTimesForMyLocation((error, passTimes) => {
   if (error) {
-    return console.log("It didn't work!" , error);
+    return console.log("It didn't work!", error);
   }
-  console.log('It worked! Returned IP:' , ip);
-
-  //fetchCoordsByIP() nested callback Implementation
-  fetchCoordsByIP(`http://ipwho.is/${ip}`, (error,coords) =>{
-    if (error) {
-      console.log("It didn't work!" , error);
-    }
-    console.log('It worked! Returned IP coordinates:' , coords);
-  
-    //fetchISSFlyOverTimes() nested callback Implementation
-   
-    fetchISSFlyOverTimes(coords, (error,passes) =>{
-      if (error) {
-        console.log("It didn't work!" , error);
-      } else {
-        console.log('It worked! Returned passes:' , passes);
-      }
-    });
-
-  }
-  );
-  
+  // success, print out the deets!
+  console.log(passTimes);
 });
 
 
-/**
- * Orchestrates multiple API requests in order to determine the next 5 upcoming ISS fly overs for the user's current location.
- * Input:
- *   - A callback with an error or results.
- * Returns (via Callback):
- *   - An error, if any (nullable)
- *   - The fly-over times as an array (null if error):
- *     [ { risetime: <number>, duration: <number> }, ... ]
- */
-
+// for (const key in passes) {
+//   const riseTimeDate = new Date(passes.risetime * 1000);
+//   const passTimes = `Next pass at ${riseTimeDate} for ${passes.duration} seconds`;
+//   callback(null,passTimes);
