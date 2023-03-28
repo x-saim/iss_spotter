@@ -9,7 +9,10 @@ const { fetchMyIP, fetchCoordsByIP } = require('./iss');
 //   console.log('It worked! Returned IP:' , ip);
 // });
 
-fetchCoordsByIP("99.246.22.219", (error,data) =>{
+fetchCoordsByIP("https://ipwho.is/42", (error,data) =>{
+  if(error) {
   console.log(error);
-  console.log(data);
+  } else {
+    console.log(data);
+  }
 });

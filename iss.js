@@ -15,7 +15,7 @@ const fetchMyIP = function(callback) {
   request('https://api.ipify.org/?format=json', (error, response, body) => {
     
     //error can be set if invalid domain, user is offline, etc.
-    if (error) return callback(error,null)
+    if (error) return callback(error,null);
 
     // if non-200 status, assume server error
     if (response.statusCode !== 200) {
@@ -30,24 +30,32 @@ const fetchMyIP = function(callback) {
   }
   );
 };
+//
+//http://ipwho.is/99.246.22.219
+const fetchCoordsByIP = function(ip, callback) {
+  request("https://ipwho.is/42", (error, response, body) => {
+    //error handle for request
+    if (error) return callback(error,null);
 
-const fetchCoordsByIP = function (ip, callback) {
-  request("http://ipwho.is/99.246.22.219", (error, response, body) => {
-  if(error) return callback(error,null)
+    const geoData = {
+      "latitude":
+      "longitude"
+    };
 
-  const geoData = {
-    "latitude":
-    "longitude"
-  };
-
-  geoData.latitude = JSON.parse(body).latitude;
-  geoData.longitude = JSON.parse(body).longitude;
-  console.log(geoData);
-
-  })
-
-
-
+    //error handling for invalild IP Address
+    const sucessCheck = JSON.parse(body).success;
+    if (sucessCheck === false) {
+      callback(Error(`Error: ${JSON.parse(body).message}`), null);
+      return;
+    } else {
+      
+      geoData.latitude = JSON.parse(body).latitude;
+      geoData.longitude = JSON.parse(body).longitude;
+      callback(null,geoData);
+    }
   }
+  );
+};
+
 
 module.exports = { fetchMyIP, fetchCoordsByIP };
