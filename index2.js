@@ -14,4 +14,7 @@ const printPassTimes = (passTimes) => {
 nextISSTimesForMyLocation()
   .then((passTimes) => {
     printPassTimes(passTimes);
+  })
+  .catch((error) => {     //an error handling callback
+    console.log("It didn't work: ", error.message);
   });
