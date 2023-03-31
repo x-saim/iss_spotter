@@ -43,6 +43,7 @@ const fetchMyIP = function(callback) {
 
 const fetchCoordsByIP = function(ip, callback) {
   request(ip, (error, response, body) => {
+    console.log(ip);
     //error handle for request
     if (error) return callback(error,null);
 
